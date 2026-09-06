@@ -138,15 +138,13 @@ Para trocar ou adicionar um ícone basta exportar o SVG do Figma e salvar em
 `<Icon name="<nome>" />` sem nenhum outro passo.
 
 Em `src/assets/img/`: `logo-tenve.png` (pictograma), `wordmark-tenve.png`
-(logotipo do splash e do login), `qr-laudo.png` (o QR do cabeçalho do laudo) e
-os dois fundos verdes do acesso.
+(logotipo do splash e do login) e `qr-laudo.png` (o QR do cabeçalho do laudo).
 
-A forma verde do splash e do login é o mesmo vetor no Figma (`Vector 4`), com
-blur — que não sobrevive a uma aproximação em CSS. Ela vem como PNG @2x já
-recortada na largura da tela, em duas versões porque o vetor aparece em
-posições diferentes nas duas telas: `splash-blob.png` (412×682) e
-`hero-blob.png` (412×337). O PNG é aplicado como fundo do aparelho, atrás da
-status bar, como no arquivo.
+O fundo do acesso é degradê, não imagem: o Figma usa um radial no splash e um
+linear no login, com matrizes de transformação que não traduzem direto para
+CSS. Os valores em `styles.css` foram amostrados do render do próprio arquivo —
+`linear-gradient(138deg,#348b54,#06542a)` no splash e
+`linear-gradient(158deg,#2a7e48,#044f1e)` no login.
 
 ## Fora do escopo
 

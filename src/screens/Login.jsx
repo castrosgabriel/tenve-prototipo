@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 import Icon from '../icons'
-import { ActionBar, Button, Field } from '../ui'
+import { Button, Field } from '../ui'
 import wordmark from '../assets/img/wordmark-tenve.png'
-import heroBlob from '../assets/img/hero-blob.png'
-import splashBlob from '../assets/img/splash-blob.png'
 
 export function Splash({ nav }) {
   useEffect(() => {
@@ -12,11 +10,11 @@ export function Splash({ nav }) {
   }, [])
   return (
     <div className="splash" onClick={() => nav.reset('login')}>
-      <img className="blob" src={splashBlob} alt="" />
-      <img className="wordmark" src={wordmark} alt="Tenvê" />
-      <div className="tagline">Vistoria veicular inteligente</div>
+      <div className="acesso-marca">
+        <img className="wordmark" src={wordmark} alt="Tenvê" />
+        <div className="tagline">Vistoria veicular inteligente</div>
+      </div>
       <div className="splashbar"><i /></div>
-      <div className="splashver">Versão 1.0.0 · build {__BUILD__}</div>
     </div>
   )
 }
@@ -39,15 +37,15 @@ export function Login({ nav, store }) {
   }
 
   return (
-    <div className="scroll">
-      {/* dentro do container que rola: sobe junto com o conteúdo, sem JS */}
-      <img className="blob" src={heroBlob} alt="" />
-      <div className="hero">
-        <img className="wordmark" src={wordmark} alt="Tenvê" />
-        <div className="tagline">Vistoria veicular inteligente</div>
+    <div className="login">
+      <div className="login-topo">
+        <div className="acesso-marca">
+          <img className="wordmark" src={wordmark} alt="Tenvê" />
+          <div className="tagline">Vistoria veicular inteligente</div>
+        </div>
       </div>
 
-      <div className="pad">
+      <div className="folha">
         <h2 className="logintitle">Entre com o acesso liberado pela sua franquia.</h2>
 
         <Field label="E-mail" required icon="mail" error={erro.email}
@@ -74,6 +72,7 @@ export function Login({ nav, store }) {
         </button>
 
         <Button onClick={entrar}>Entrar</Button>
+
         <div className="loginfoot">Problemas para entrar? Fale com a sua franquia.</div>
       </div>
     </div>

@@ -206,7 +206,7 @@ export default function App() {
 
   return (
     <div className="stage">
-      <div className={`phone${noAcesso ? ' phone--acesso' : ''}`}>
+      <div className={`phone${noAcesso ? ' phone--acesso' : ''}${atual.nome === 'splash' ? ' phone--splash' : ''}`}>
         <StatusBar />
 
         <div className="palco">

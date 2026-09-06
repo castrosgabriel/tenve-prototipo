@@ -41,7 +41,7 @@ export default function Perfil({ store }) {
         </button>
 
         <div style={{ textAlign: 'center', fontSize: 12, color: '#a2ada7', padding: 20 }}>
-          Tenvê · protótipo navegável v0.1
+          Tenvê · protótipo navegável · build {__BUILD__}
         </div>
       </div>
     </>

@@ -161,7 +161,7 @@ input,textarea{font-family:inherit;color:inherit}
 
 /* ---------- forms ---------- */
 .field{margin-bottom:16px}
-.field label{display:block;font-size:13px;color:var(--ink-700);margin-bottom:6px}
+.field label{display:block;font-size:13px;color:var(--ink-700);margin-bottom:8px}
 .field label i{color:var(--danger);font-style:normal}
 .inputwrap{display:flex;align-items:center;gap:10px;height:56px;padding:0 14px;border:1px solid var(--hairline);border-radius:12px;background:#fff;transition:border-color .15s ease,box-shadow .15s ease}
 .inputwrap:focus-within{border-color:var(--forest);box-shadow:0 0 0 3px rgba(4,102,43,.08)}
@@ -270,37 +270,44 @@ textarea.ta::placeholder{color:var(--ink-300)}
 
 /* ---------- acesso (fundo exportado do Figma) ---------- */
 /* a forma verde tem blur no Figma, então entra como PNG atrás da status bar */
-/* No acesso a barra de status flutua sobre o conteúdo: assim o verde passa por
-   trás dela e mesmo assim mora dentro do container que rola, subindo junto. */
-.phone--acesso > .statusbar{position:absolute;top:0;left:0;right:0;z-index:2}
-/* o conteúdo passa por baixo dela ao rolar; o desfoque evita a colisão e some
-   na borda de baixo para não criar uma faixa dura */
-.phone--acesso > .statusbar::before{
-  content:'';position:absolute;inset:-1px 0 0;z-index:-1;
-  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
-  -webkit-mask-image:linear-gradient(#000 58%,transparent);
-  mask-image:linear-gradient(#000 58%,transparent);
-}
-.blob{position:absolute;top:0;left:0;width:100%;display:block;pointer-events:none}
-.splash,.phone--acesso .scroll{position:relative}
-.splash > *:not(.blob),.phone--acesso .scroll > *:not(.blob){position:relative;z-index:1}
+/* ---------- acesso (Splash e Login) ----------
+   O fundo agora é um degradê verde-escuro na tela inteira; a barra de status
+   fica flutuando por cima dele, em branco.                                   */
+.phone--acesso > .statusbar{position:absolute;top:0;left:0;right:0;z-index:2;color:#fff}
+/* no splash o verde vai até a borda de baixo, por trás do indicador de home */
+.phone--splash{background:linear-gradient(138deg,#348b54 0%,#06542a 100%)}
+.phone--splash .homeind span{background:#fff}
 
-.wordmark{width:168px;height:auto;display:block}
-.tagline{font-size:14px;color:var(--ink-900);margin-top:12px}
+.splash,.login{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center}
+/* amostrado do render do Figma: quase vertical, com leve deriva para a direita */
+.splash{justify-content:center;position:relative;cursor:pointer;
+  background:linear-gradient(138deg,#348b54 0%,#06542a 100%)}
+.login{background:linear-gradient(158deg,#2a7e48 0%,#044f1e 100%)}
 
-/* login: forma ocupa os 337px do topo; conteúdo posicionado como no Figma */
-.hero{flex:none;height:298px;display:flex;flex-direction:column;align-items:center;padding-top:127px}
-.logintitle{font-size:26px;font-weight:600;letter-spacing:-.4px;line-height:33px;margin:60px 0 16px}
-.linkr{display:block;margin-left:auto;font-size:13px;font-weight:500;color:var(--forest);padding:14px 0 22px}
-.loginfoot{text-align:center;font-size:13px;color:var(--ink-400);padding:28px 0}
+.acesso-marca{display:flex;flex-direction:column;align-items:center}
+.wordmark{width:218px;height:auto;display:block}
+.tagline{font-size:13px;line-height:18px;color:var(--lime);margin-top:17px}
 
-/* splash */
-.splash{flex:1;display:flex;flex-direction:column;align-items:center;padding-top:300px;cursor:pointer}
-.splash .wordmark{animation:pop .6s ease both}
-.splash .tagline{margin-top:23px}
-.splashbar{width:120px;height:4px;border-radius:2px;background:rgba(255,255,255,.6);margin-top:23px;overflow:hidden}
-.splashbar i{display:block;height:100%;width:34%;border-radius:2px;background:var(--forest);animation:load 1.5s ease-in-out infinite}
-.splashver{margin-top:auto;padding-bottom:37px;font-size:13px;color:var(--ink-500)}
+/* barra de carregamento do splash: 120x4 em 75,5% da altura */
+.splashbar{position:absolute;top:75.5%;width:120px;height:4px;border-radius:999px;
+  background:#03501f;overflow:hidden}
+.splashbar i{display:block;height:100%;width:38%;border-radius:999px;background:var(--lime-soft);
+  animation:load 1.6s ease-in-out infinite}
+
+/* login: verde em cima, folha branca embaixo */
+.login-topo{flex:1 1 auto;min-height:120px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding-top:29px}
+.folha{flex:none;width:100%;background:#fff;border-radius:32px 32px 0 0;
+  padding:40px 20px 0;overflow-y:auto}
+.logintitle{font-size:20px;line-height:26px;font-weight:600;letter-spacing:-.2px;
+  text-align:center;margin:0 0 16px}
+.linkr{display:block;margin-left:auto;font-size:13px;font-weight:500;color:var(--forest);padding:0 0 32px}
+.folha .btn{height:56px;border-radius:28px}
+.loginfoot{text-align:center;font-size:13px;color:var(--ink-400);padding:24px 0}
+
+
+
+.acesso-marca{animation:pop .6s ease both}
 @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
 @keyframes load{0%{width:12%}60%{width:78%}100%{width:96%}}
 
