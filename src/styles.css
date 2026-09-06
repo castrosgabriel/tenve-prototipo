@@ -1,0 +1,362 @@
+:root{
+  /* brand */
+  --lime:#7edf20;
+  --lime-hi:#8ce62c;
+  --lime-ink:#0c2e10;
+  --lime-soft:#f0fbde;
+  --forest:#04662b;
+  --forest-soft:#e7f1ea;
+  /* ink */
+  --ink-900:#0b1410;
+  --ink-700:#35433c;
+  --ink-500:#6b7a72;
+  --ink-400:#8b968f;
+  --ink-300:#a2ada7;
+  --ink-inv:#ffffff;
+  /* surfaces / lines */
+  --raised:#ffffff;
+  --canvas:#f2f4f0;
+  --track:#dde1d9;
+  --hairline:#e4ece3;
+  --line-strong:#d2d7cf;
+  /* states */
+  --success:#3f7a10;
+  --danger:#ff3954;
+  --danger-ink:#d01836;
+  --danger-soft:#ffebee;
+  --warning:#ff8027;
+  --warning-soft:#fff1e6;
+  --info:#0053ff;
+  --radius:14px;
+  --bar-shadow:0 -10px 28px -8px rgba(10,20,15,.09);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--ink-900);
+  background:#dfe4dc;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,textarea{font-family:inherit;color:inherit}
+.mono{font-family:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+
+/* ---------- device ---------- */
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px;gap:28px}
+.phone{
+  width:412px;height:917px;flex:none;background:#fff;border-radius:46px;position:relative;
+  overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 40px 80px -24px rgba(11,20,16,.38),0 0 0 10px #10160f,0 0 0 12px #313a30;
+}
+@media (max-width:720px){
+  /* O documento não pode ter folga de rolagem. 100vh no iOS é o viewport GRANDE
+     (sem barra de endereço), maior que o visível — essa sobra deixava a página
+     rolar, e quando o teclado abria o iOS empurrava tudo para cima e não
+     devolvia. Era isso que comia o topo do header. */
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+  .stage{height:100dvh;min-height:0;padding:0}
+  .phone{width:100vw;height:100%;border-radius:0;box-shadow:none}
+  .hint{display:none!important}
+  /* sem moldura, quem desenha a barra de status e o indicador de home é o
+     próprio aparelho — os nossos só duplicariam. Do indicador sobra apenas o
+     recuo da área segura, quando o sistema reserva uma. */
+  .phone > .statusbar{display:none}
+  .phone > .homeind span{display:none}
+  .phone > .homeind{height:env(safe-area-inset-bottom, 0px)}
+}
+.hint{max-width:220px;font-size:13px;line-height:19px;color:#4d5a51}
+.hint b{display:block;color:#0b1410;font-size:14px;margin-bottom:6px}
+.hint ul{margin:8px 0 0;padding-left:16px}
+.hint li{margin-bottom:5px}
+
+.statusbar{height:54px;flex:none;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 6px;font-size:15px;font-weight:600;letter-spacing:-.2px}
+.statusbar .icons{display:flex;align-items:center;gap:5px}
+.homeind{height:34px;flex:none;display:flex;align-items:center;justify-content:center;background:transparent}
+.homeind span{width:140px;height:5px;border-radius:3px;background:#0b1410}
+
+.palco{flex:1;min-height:0;position:relative;isolation:isolate}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:#fff;will-change:transform,opacity}
+.scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.scroll::-webkit-scrollbar{width:0}
+.pad{padding:0 20px}
+
+/* ---------- header ---------- */
+/* Navegação do Figma: 48px de altura, e o Conteúdo começa 22px abaixo dela.
+   Na lista de vistorias a fileira de filtros ocupava esse respiro; na de
+   pesquisas não há nada no meio, então a falta ficava à vista. */
+.appbar{flex:none;height:48px;padding:0 20px;margin-bottom:22px;display:flex;align-items:center;gap:12px}
+.appbar h1{font-size:24px;line-height:30px;font-weight:600;letter-spacing:-.3px;margin:0;flex:1}
+.logo{flex:none;display:block;object-fit:contain}
+.iconbtn{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--ink-900)}
+.iconbtn:hover{background:var(--canvas)}
+.backbtn{width:32px;height:32px;border-radius:11px;background:var(--canvas);display:flex;align-items:center;justify-content:center;flex:none}
+.backbtn:hover{background:#e7ebe4}
+
+/* mesma régua do .appbar: a linha do título ocupa 54→102 */
+.stepbar{flex:none;padding:0 20px}
+.stepbar .row{display:flex;align-items:center;gap:12px;height:48px}
+.stepbar h1{font-size:24px;line-height:30px;font-weight:600;letter-spacing:-.3px;margin:0}
+.stepbar .sub{font-size:13px;line-height:18px;color:var(--ink-500);padding:2px 0 10px}
+.progress-line{height:4px;background:var(--track);margin:0 -20px}
+.progress-line i{display:block;height:100%;background:var(--lime);transition:width .35s ease}
+
+.ctxbar{flex:none;display:flex;align-items:center;gap:8px;padding:14px 20px;background:#eef1ec;font-size:13px;color:var(--ink-500)}
+.ctxbar .plate{font-family:"Geist Mono",monospace;font-weight:600;font-size:15px;letter-spacing:1.5px;color:var(--ink-900)}
+
+/* ---------- action bar ---------- */
+.actionbar{flex:none;padding:16px 20px 12px;background:#fff;box-shadow:var(--bar-shadow);display:flex;gap:12px}
+.btn{height:54px;border-radius:27px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px;font-weight:600;letter-spacing:-.1px;width:100%;transition:transform .08s ease,filter .15s ease}
+.btn:active{transform:scale(.985)}
+.btn-primary{background:var(--lime);color:var(--lime-ink)}
+.btn-primary:hover{background:var(--lime-hi)}
+.btn-primary:disabled{background:#e6eade;color:var(--ink-300);cursor:not-allowed}
+.btn-dark{background:var(--forest);color:#fff}
+.btn-ghost{background:#fff;color:var(--ink-900);box-shadow:inset 0 0 0 1px var(--line-strong)}
+.btn-ghost:hover{background:var(--canvas)}
+.btn-auto{width:auto;padding:0 26px;flex:none}
+
+/* ---------- pills & chips ---------- */
+.pill{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:13px;font-size:11px;font-weight:500;letter-spacing:.3px;white-space:nowrap}
+.pill-andamento{background:var(--lime-soft);color:var(--success)}
+.pill-expirado{background:var(--danger-soft);color:var(--danger-ink)}
+.pill-arealizar{background:#eef1ec;color:var(--ink-700)}
+.pill-concluida{background:var(--forest-soft);color:var(--forest)}
+
+.filters{display:flex;gap:8px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.fpill{height:36px;padding:0 16px;border-radius:18px;background:var(--canvas);color:var(--ink-700);font-size:13px;font-weight:500;white-space:nowrap;flex:none}
+.fpill.on{background:var(--forest);color:#fff}
+
+.grouphdr{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 8px;font-size:13px;color:var(--ink-500)}
+
+/* ---------- cards ---------- */
+.card{background:#fff;border:1px solid var(--hairline);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.card h3{margin:0 0 12px;font-size:16px;font-weight:600;letter-spacing:-.1px}
+.drow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--hairline);font-size:14px}
+.drow:last-child{border-bottom:none;padding-bottom:0}
+.drow:first-of-type{padding-top:0}
+.drow .k{color:var(--ink-500)}
+.drow .v{font-weight:600;text-align:right}
+
+.listrow{background:#fff;border:1px solid var(--hairline);border-radius:var(--radius);padding:16px;margin:0 20px 12px;width:calc(100% - 40px);text-align:left;display:block;transition:border-color .15s ease,transform .08s ease}
+.listrow:hover{border-color:var(--line-strong)}
+.listrow:active{transform:scale(.99)}
+.listrow .top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.listrow .plate{font-family:"Geist Mono",monospace;font-size:20px;font-weight:600;letter-spacing:.6px;line-height:26px}
+.listrow .price{font-size:15px;color:var(--ink-700);margin-top:2px}
+.listrow .sep{height:1px;background:var(--hairline);margin:14px 0 12px}
+.listrow .meta{display:flex;align-items:center;gap:14px;font-size:12px;color:var(--ink-500)}
+.listrow .meta .right{margin-left:auto}
+.match{color:var(--ink-300)}
+.match b{color:var(--ink-900);font-weight:600}
+
+.note{display:flex;gap:10px;padding:14px;border-radius:12px;font-size:13px;line-height:19px;margin-bottom:16px}
+.note-info{background:var(--forest-soft);color:var(--ink-700)}
+.note-lime{background:var(--lime-soft);color:var(--ink-700)}
+.note-warn{background:var(--warning-soft);color:var(--ink-700)}
+.note b{display:block;color:var(--ink-900);margin-bottom:2px}
+.note svg{flex:none;margin-top:1px}
+
+/* ---------- forms ---------- */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;color:var(--ink-700);margin-bottom:6px}
+.field label i{color:var(--danger);font-style:normal}
+.inputwrap{display:flex;align-items:center;gap:10px;height:56px;padding:0 14px;border:1px solid var(--hairline);border-radius:12px;background:#fff;transition:border-color .15s ease,box-shadow .15s ease}
+.inputwrap:focus-within{border-color:var(--forest);box-shadow:0 0 0 3px rgba(4,102,43,.08)}
+.inputwrap.ok{border-color:var(--forest)}
+.inputwrap.err{border-color:var(--danger)}
+.inputwrap svg{color:var(--ink-400);flex:none}
+.inputwrap input{flex:1;min-width:0;border:none;outline:none;font-size:15px;background:transparent}
+.inputwrap input::placeholder{color:var(--ink-300)}
+.errtext{font-size:12px;color:var(--danger-ink);margin-top:6px}
+textarea.ta{width:100%;border:none;outline:none;resize:none;font-size:16px;line-height:24px;min-height:150px}
+textarea.ta::placeholder{color:var(--ink-300)}
+
+/* ---------- tabbar ---------- */
+.tabbar{flex:none;display:flex;background:#fff;border-top:1px solid var(--hairline);padding:6px 0 0}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--ink-400);font-size:11px;font-weight:500}
+.tab .bubble{width:56px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center}
+.tab.on{color:var(--forest)}
+.tab.on .bubble{background:var(--lime-soft)}
+
+/* ancorado no .screen, que já termina onde a tab bar começa:
+   no Figma o FAB fica a 21px do topo da tab bar */
+.fab{position:absolute;right:20px;bottom:21px;height:54px;padding:0 22px;border-radius:27px;background:var(--forest);color:#fff;display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600;box-shadow:0 12px 24px -8px rgba(4,60,25,.5)}
+.fab:hover{background:#05753a}
+.fab:active{transform:scale(.97)}
+
+/* ---------- search ---------- */
+.searchwrap{padding:27px 20px 10px}
+.searchbox{display:flex;align-items:center;gap:10px;height:56px;padding:0 14px;border-radius:14px;background:var(--forest-soft);border:1px solid transparent}
+.searchbox:focus-within{border-color:var(--forest);background:#fff}
+.searchbox input{flex:1;min-width:0;border:none;outline:none;background:transparent;font-size:15px}
+.searchbox input::placeholder{color:var(--ink-400)}
+.empty{padding:64px 32px;text-align:center;color:var(--ink-400);font-size:14px;line-height:21px}
+.empty svg{margin-bottom:12px;color:var(--ink-300)}
+
+/* ---------- progresso hub ---------- */
+.hubgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:4px 20px 20px}
+.hubcard{border:1px solid var(--hairline);border-radius:var(--radius);padding:14px;min-height:134px;display:flex;flex-direction:column;text-align:left;background:#fff}
+.hubcard.opt{border:1px dashed #c3dd9a;background:#fff}
+.hubcard.done{background:var(--lime-soft);border-color:transparent}
+.hubcard:hover{border-color:var(--line-strong)}
+.hubcard .num{width:28px;height:28px;border-radius:14px;background:var(--canvas);color:var(--ink-500);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;margin-bottom:auto}
+.hubcard.done .num{background:var(--forest);color:#fff}
+.hubcard .t{font-size:15px;font-weight:600;line-height:20px;margin-top:36px}
+.hubcard.opt .t{color:var(--ink-500)}
+.hubcard .s{font-size:12px;color:var(--ink-400);margin-top:3px}
+.hubcard.done .s{color:var(--success)}
+
+/* ---------- fotos ---------- */
+.metercount{display:flex;align-items:baseline;justify-content:space-between;padding:4px 0 8px}
+.metercount b{font-size:17px;font-weight:600}
+.metercount span{font-size:13px;color:var(--ink-500)}
+.bar{height:6px;border-radius:3px;background:var(--track);overflow:hidden;margin-bottom:18px}
+.bar i{display:block;height:100%;background:var(--lime);transition:width .3s ease}
+.photogrid{display:grid;grid-template-columns:1fr 1fr;gap:12px 12px}
+.slot{position:relative;height:136px;border-radius:12px;background:#eef0ec;border:1px dashed var(--line-strong);display:flex;align-items:center;justify-content:center;color:var(--ink-300);overflow:hidden}
+.slot.filled{border:none;background:linear-gradient(135deg,#c5c8cb,#9ea2a5 52%,#8c9193)}
+.slot .idx{position:absolute;top:8px;left:8px;font-family:"Geist Mono",monospace;font-size:12px;font-weight:600;background:rgba(255,255,255,.9);border-radius:6px;padding:2px 6px;color:var(--ink-700)}
+.slot.filled .idx{color:var(--ink-900)}
+.slot .ck{position:absolute;right:8px;bottom:8px;width:24px;height:24px;border-radius:12px;background:var(--forest);display:flex;align-items:center;justify-content:center}
+.slotlabel{font-size:13px;color:var(--ink-700);margin:6px 0 0}
+
+/* ---------- pintura ---------- */
+.mpoint{padding:16px 0;border-bottom:1px solid var(--hairline)}
+.mpoint .hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.mpoint .hd .n{font-family:"Geist Mono",monospace;font-size:13px;color:var(--ink-400)}
+.mpoint .hd .nm{font-size:15px;flex:1}
+.swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sw{height:48px;border-radius:10px;border:2px solid transparent;transition:all .15s ease}
+.sw.sel{border-color:var(--ink-900);transform:scale(1.02)}
+.swlabel{font-size:11px;color:var(--ink-400);text-align:center;margin-top:5px}
+
+/* ---------- checklist ---------- */
+.checkrow{padding:16px 0;border-bottom:1px solid var(--hairline)}
+.checkrow .q{display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:12px}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ynbtn{height:52px;border-radius:12px;border:1px solid var(--hairline);display:flex;align-items:center;gap:10px;padding:0 16px;font-size:15px;background:#fff}
+.ynbtn .dot{width:20px;height:20px;border-radius:10px;border:1.5px solid var(--line-strong);flex:none;display:flex;align-items:center;justify-content:center}
+.ynbtn.on{border-color:var(--forest);background:var(--forest-soft)}
+.ynbtn.on .dot{background:var(--forest);border-color:var(--forest)}
+
+/* ---------- extras ---------- */
+.adddash{width:100%;height:56px;border:1px dashed #b9d68e;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--forest);font-size:15px;font-weight:600;background:#fff;margin-bottom:18px}
+.adddash:hover{background:var(--lime-soft)}
+.extrarow{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--hairline)}
+.extrathumb{width:60px;height:60px;border-radius:10px;background:linear-gradient(135deg,#c5c8cb,#9ea2a5 52%,#8c9193);flex:none}
+.extrarow .body{flex:1;min-width:0}
+.extrarow .cat{font-size:13px;font-weight:600;color:var(--forest)}
+.extrarow .ti{font-size:14px}
+.extrarow .de{font-size:13px;color:var(--ink-400)}
+.sqbtn{width:36px;height:36px;border-radius:10px;background:var(--canvas);display:flex;align-items:center;justify-content:center;flex:none;color:var(--ink-700)}
+.sqbtn.danger{background:var(--danger-soft);color:var(--danger-ink)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-radius:10px;background:var(--lime-soft);color:var(--forest);font-size:14px;font-weight:500}
+.chip:hover{background:#e5f7c9}
+
+/* ---------- profile ---------- */
+.profcard{display:flex;align-items:center;gap:14px;padding:18px}
+.avatar{width:56px;height:56px;border-radius:28px;background:var(--lime-soft);color:var(--forest);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600}
+.menurow{display:flex;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid var(--hairline);font-size:15px;width:100%;text-align:left}
+.menurow:last-child{border-bottom:none}
+.menurow svg:first-child{color:var(--forest)}
+.menurow .arrow{margin-left:auto;color:var(--ink-300)}
+.logout{width:100%;height:54px;border-radius:14px;border:1px solid #f6d4da;color:var(--danger-ink);display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:600;background:#fff}
+.logout:hover{background:var(--danger-soft)}
+
+/* ---------- acesso (fundo exportado do Figma) ---------- */
+/* a forma verde tem blur no Figma, então entra como PNG atrás da status bar */
+/* No acesso a barra de status flutua sobre o conteúdo: assim o verde passa por
+   trás dela e mesmo assim mora dentro do container que rola, subindo junto. */
+.phone--acesso > .statusbar{position:absolute;top:0;left:0;right:0;z-index:2}
+/* o conteúdo passa por baixo dela ao rolar; o desfoque evita a colisão e some
+   na borda de baixo para não criar uma faixa dura */
+.phone--acesso > .statusbar::before{
+  content:'';position:absolute;inset:-1px 0 0;z-index:-1;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  -webkit-mask-image:linear-gradient(#000 58%,transparent);
+  mask-image:linear-gradient(#000 58%,transparent);
+}
+.blob{position:absolute;top:0;left:0;width:100%;display:block;pointer-events:none}
+.splash,.phone--acesso .scroll{position:relative}
+.splash > *:not(.blob),.phone--acesso .scroll > *:not(.blob){position:relative;z-index:1}
+
+.wordmark{width:168px;height:auto;display:block}
+.tagline{font-size:14px;color:var(--ink-900);margin-top:12px}
+
+/* login: forma ocupa os 337px do topo; conteúdo posicionado como no Figma */
+.hero{flex:none;height:298px;display:flex;flex-direction:column;align-items:center;padding-top:127px}
+.logintitle{font-size:26px;font-weight:600;letter-spacing:-.4px;line-height:33px;margin:60px 0 16px}
+.linkr{display:block;margin-left:auto;font-size:13px;font-weight:500;color:var(--forest);padding:14px 0 22px}
+.loginfoot{text-align:center;font-size:13px;color:var(--ink-400);padding:28px 0}
+
+/* splash */
+.splash{flex:1;display:flex;flex-direction:column;align-items:center;padding-top:300px;cursor:pointer}
+.splash .wordmark{animation:pop .6s ease both}
+.splash .tagline{margin-top:23px}
+.splashbar{width:120px;height:4px;border-radius:2px;background:rgba(255,255,255,.6);margin-top:23px;overflow:hidden}
+.splashbar i{display:block;height:100%;width:34%;border-radius:2px;background:var(--forest);animation:load 1.5s ease-in-out infinite}
+.splashver{margin-top:auto;padding-bottom:37px;font-size:13px;color:var(--ink-500)}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes load{0%{width:12%}60%{width:78%}100%{width:96%}}
+
+/* success screen */
+.successicon{width:44px;height:44px;border-radius:22px;background:var(--forest);display:flex;align-items:center;justify-content:center;flex:none}
+
+/* laudo */
+.laudo{background:#fff;font-size:11px}
+.laudo .lhead{background:#0b1410;color:#fff;padding:16px;border-radius:12px 12px 0 0;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.laudo .lhead .wm{font-size:22px;font-weight:700;color:var(--lime);letter-spacing:-.5px;line-height:1}
+.laudo .lhead .sb{font-size:9px;color:#9fb0a6;line-height:14px;margin-top:6px;letter-spacing:.4px}
+.laudo .lhead .rt{text-align:right}
+.laudo .lhead .rt .k{font-size:8px;color:var(--lime);letter-spacing:.6px}
+.laudo .lhead .rt .n{font-size:19px;font-weight:700}
+.laudo .lhead .rt .s{font-size:8px;color:#9fb0a6;letter-spacing:.4px}
+.laudo .limebar{height:3px;background:var(--lime)}
+.laudo .lstrip{display:flex;gap:8px;align-items:center;padding:12px;background:#f7f9f5;border-left:1px solid var(--hairline);border-right:1px solid var(--hairline)}
+.laudo .platebadge{background:var(--info);color:#fff;border-radius:8px;padding:6px 10px;text-align:center;flex:none}
+.laudo .platebadge .k{font-size:8px;letter-spacing:.6px;opacity:.85}
+.laudo .platebadge .p{font-family:"Geist Mono",monospace;font-size:14px;font-weight:600;letter-spacing:.5px}
+.laudo .lstrip .cell{flex:1;min-width:0}
+.laudo .lstrip .cell .k{font-size:6px;color:var(--ink-400);letter-spacing:.2px;line-height:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.laudo .lstrip .cell .v{font-size:6.5px;font-weight:500;line-height:10px}
+.laudo .cats{display:flex;gap:6px;padding:12px;border-left:1px solid var(--hairline);border-right:1px solid var(--hairline)}
+.laudo .cat{flex:1;border-radius:8px;padding:8px 6px;color:#fff;font-size:8px;font-weight:600;line-height:11px;min-height:56px;display:flex;flex-direction:column;justify-content:space-between}
+.laudo .cat .box{width:10px;height:10px;border-radius:2px;background:rgba(255,255,255,.85)}
+.laudo .sec{border:1px solid var(--hairline);border-top:none}
+.laudo .sechd{background:#0b1410;color:#fff;font-size:9px;font-weight:600;letter-spacing:.6px;padding:7px 12px}
+.laudo .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:12px}
+.laudo .grid4 .k{font-size:7.5px;color:var(--ink-400);letter-spacing:.2px;text-transform:uppercase;line-height:10px}
+.laudo .grid4 .v{font-size:10px;font-weight:500;overflow-wrap:anywhere}
+.laudo .tagline2{display:inline-flex;align-items:center;gap:4px;border-radius:5px;padding:4px 7px;font-size:7px;font-weight:600;color:#fff;margin:0 5px 5px 0;line-height:10px}
+.laudo table{width:100%;border-collapse:collapse;font-size:9px}
+.laudo th{background:#eef1ec;text-align:left;padding:6px 12px;font-size:8px;letter-spacing:.5px;color:var(--ink-500)}
+.laudo td{padding:7px 12px;border-top:1px solid var(--hairline)}
+
+/* ---------- ícones exportados do Figma ---------- */
+.ico{display:inline-flex;flex:none;line-height:0}
+.ico svg{display:block;width:100%;height:100%}
+.ico[style*="--sw"] svg path{stroke-width:var(--sw)}
+.laudo .lhead .qr{border-radius:4px;flex:none;background:#fff;padding:3px}
+.laudo .restr{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 12px 4px}
+.laudo .rk{font-size:8px;color:#8b968f;letter-spacing:.4px;margin-bottom:6px}
+.laudo .tagline2 .sq{width:7px;height:7px;border-radius:2px;background:rgba(255,255,255,.9);flex:none}
+.irow{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--hairline)}
+.irow:first-of-type{padding-top:0}
+.irow:last-child{border-bottom:none;padding-bottom:0}
+.irow .ik{font-size:13px;color:var(--ink-500);line-height:18px}
+.irow .iv{font-size:15px;font-weight:600;line-height:20px}
+.irow .ico{margin-top:2px}
+
+/* ---------- instalado na tela de início ----------
+   Em tela cheia quem desenha a barra de status e o indicador é o sistema,
+   então os nossos saem de cena para não duplicar.                          */
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  .phone > .statusbar{display:none}
+  .phone > .homeind span{display:none}
+  .phone > .homeind{height:max(env(safe-area-inset-bottom), 8px)}
+}
