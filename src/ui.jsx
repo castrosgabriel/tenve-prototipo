@@ -114,7 +114,7 @@ export function DataRow({ k, v, mono, strong }) {
   return (
     <div className="drow">
       <span className="k">{k}</span>
-      <span className={`v${mono ? ' mono' : ''}`} style={strong ? { color: '#04662b' } : undefined}>{v}</span>
+      <span className={`v${mono ? ' mono' : ''}${strong ? ' forte' : ''}`}>{v}</span>
     </div>
   )
 }
@@ -133,7 +133,7 @@ export function IconRow({ icon, k, v, mono }) {
 }
 
 export function Note({ tone = 'info', icon = 'info', title, children }) {
-  const colors = { info: '#04662b', lime: '#04662b', warn: '#ff8027' }
+  const colors = { info: 'var(--forest)', lime: 'var(--forest)', warn: 'var(--warning)' }
   return (
     <div className={`note note-${tone}`}>
       <Icon name={icon} size={18} color={colors[tone]} />

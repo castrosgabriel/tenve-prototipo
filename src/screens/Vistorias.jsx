@@ -17,12 +17,8 @@ function Row({ v, onClick, query }) {
       </div>
       <div className="sep" />
       <div className="meta">
-        <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <Icon name="calendar" size={13} />{v.data}
-        </span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Icon name="map-pin" size={13} />{v.uf}
-        </span>
+        <span className="meta-item"><Icon name="calendar" size={13} />{v.data}</span>
+        <span className="meta-item meta-item--tight"><Icon name="map-pin" size={13} />{v.uf}</span>
         <span className="right">{v.laudo}</span>
       </div>
     </button>
@@ -47,7 +43,7 @@ export function ListaVistorias({ nav, store }) {
           </button>
         ))}
       </div>
-      <div className="scroll" style={{ paddingBottom: 100 }}>
+      <div className="scroll scroll--lista">
         {grupos.map(({ g, itens }) => (
           <div key={g}>
             <GroupHeader label={STATUS[g].group} count={itens.length} />
@@ -85,7 +81,7 @@ export function BuscaVistorias({ nav, store }) {
           <Icon name="search" size={20} color="#04662b" />
           <input value={q} onChange={e => setQ(e.target.value)} placeholder="Placa, Local, Nome, Data" />
           {q ? (
-            <button className="iconbtn" style={{ width: 28, height: 28 }} onClick={() => setQ('')} aria-label="Limpar">
+            <button className="iconbtn" className="iconbtn iconbtn--sm" onClick={() => setQ('')} aria-label="Limpar">
               <Icon name="x" size={18} />
             </button>
           ) : <Icon name="filter" size={18} color="#6b7a72" />}
@@ -116,11 +112,11 @@ export function DetalheVistoria({ nav, store, params }) {
   return (
     <>
       <StepBar title="Vistoria" onBack={nav.back}
-        sub={<span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        sub={<span className="linha-icone">
           <span>{v.placa} · {v.tipo}</span>
           <Pill status={v.status} />
         </span>} />
-      <div className="scroll pad" style={{ paddingTop: 16 }}>
+      <div className="scroll pad scroll--topo">
         <Card title="Informações">
           <DataRow k="Placa" v={v.placa} mono />
           <DataRow k="Tipo" v={v.tipo} />
@@ -130,9 +126,8 @@ export function DetalheVistoria({ nav, store, params }) {
         </Card>
 
         <Card title="Progresso">
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, marginBottom: 10 }}>
-            <span>{v.etapas} de {v.total} etapas concluídas</span>
-            <span style={{ color: '#04662b', fontWeight: 600 }}>{pct}%</span>
+          <div className="progresso-linha">
+            <span>{v.etapas} de {v.total} etapas concluídas</span><b>{pct}%</b>
           </div>
           <Bar value={v.etapas / v.total} />
         </Card>
@@ -143,7 +138,7 @@ export function DetalheVistoria({ nav, store, params }) {
         </Card>
 
         {v.status === 'expirado' && (
-          <div className="note note-warn" style={{ marginTop: 4 }}>
+          <div className="note note-warn">
             <Icon name="alert-triangle" size={18} color="#ff8027" />
             <div><b>Pagamento expirado</b>Gere um novo pagamento para liberar o laudo deste veículo.</div>
           </div>

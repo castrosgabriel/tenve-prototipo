@@ -59,7 +59,7 @@ export function Login({ nav, store }) {
             <input type={ver ? 'text' : 'password'} value={senha} placeholder="Sua senha"
               onChange={e => setSenha(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && entrar()} />
-            <button className="iconbtn" style={{ width: 28, height: 28 }} onClick={() => setVer(v => !v)}
+            <button className="iconbtn iconbtn--sm" onClick={() => setVer(v => !v)}
               aria-label={ver ? 'Ocultar senha' : 'Mostrar senha'}>
               <Icon name={ver ? 'eye' : 'eye-off'} size={20} color="#6b7a72" />
             </button>

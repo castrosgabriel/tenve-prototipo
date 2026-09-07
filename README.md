@@ -74,6 +74,69 @@ mícrons do teste de pintura selecionam e desbotam as demais, o checklist trava
 o botão até responder tudo, e "Finalizar vistoria" só habilita com as etapas
 obrigatórias concluídas.
 
+## Design system
+
+Todo o estilo mora em [`src/styles.css`](src/styles.css). O topo do arquivo é a
+camada de tokens; o resto são as regras de componente, que só consomem token.
+
+### Cor
+
+Os nomes são os mesmos das variáveis do arquivo do Figma — `--forest`,
+`--ink-500`, `--lime-soft`, `--danger-soft` e assim por diante. O que **não**
+veio do arquivo está marcado com `(aprox.)` no comentário: são estados de hover
+e alguns cinzas de apoio que o Figma não define.
+
+Dois casos à parte, também comentados: os degradês do acesso foram amostrados do
+render (as matrizes de gradiente do Figma não convertem direto para CSS), e o
+laudo tem paleta própria escopada em `.laudo`, porque é um relatório impresso e
+não usa os tokens do app.
+
+### Tipografia
+
+Um token por estilo de texto do Figma, com o mesmo nome. Tracking vem separado
+porque não cabe no atalho `font`:
+
+```css
+font: var(--ts-text-s); letter-spacing: var(--tk-text-s);
+```
+
+| token | Figma | valor |
+|---|---|---|
+| `--ts-display-m` | Display/M | 600 24/30, -0.3 |
+| `--ts-heading-l` | Heading/L | 600 20/26, -0.2 |
+| `--ts-text-l` | Text/L | 400 16/24 |
+| `--ts-text-m` | Text/M | 400 15/22 |
+| `--ts-text-s` | Text/S | 400 13/18 |
+| `--ts-action-l` | Action/L | 600 16/20, -0.1 |
+| `--ts-action-s` | Action/S | 600 14/18 |
+| `--ts-label-m` | Label/M | 500 13/18 |
+| `--ts-label-s` | Label/S | 500 11/14, +0.3 |
+| `--ts-mono-data` | Mono/Data | 500 13/18 |
+| `--ts-mono-plate` | Mono/Plate | 600 17/24, +1.5 |
+
+Há também classes utilitárias `.ts-display-m`, `.ts-text-s` etc., para aplicar
+direto no markup ou copiar para outro projeto.
+
+Alguns pontos usam tamanho fora da escala — a placa da fileira (mono 20/26), o
+contador de fotos (17/22), o rótulo do chip (14/18). Estão escritos por extenso
+na regra, com comentário, em vez de virar token: são exceções do desenho, não
+degraus de uma escala.
+
+### Medida
+
+Só o que se repete e tem significado virou token: `--gutter` (20px, margem
+lateral das telas), `--gap-secao` (22px, da barra de navegação ao conteúdo),
+`--gap-campo` (16px), `--alt-campo` (56px) e os quatro raios. Medida de uma tela
+só continua literal na regra, com comentário dizendo que veio do arquivo — por
+exemplo o `27px` do campo de busca, que existe porque no Figma ele começa em
+y=129.
+
+### Uma divergência conhecida
+
+O `Group Header` tem 34px no arquivo e 40px aqui (padding 14/8 + linha de 18).
+Não mexi para não alterar o layout que você já validou, mas quem for refazer a
+UI deve seguir o arquivo.
+
 ## Movimento
 
 Só transição de tela — nada de elemento se transformando entre uma e outra.

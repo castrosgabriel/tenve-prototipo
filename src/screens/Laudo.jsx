@@ -27,7 +27,7 @@ export default function Laudo({ nav, params }) {
     <>
       <StepBar title={origem === 'Pesquisa' ? 'Pesquisa' : 'Laudo'} onBack={nav.back}
         sub={<span className="mono">{placa}</span>} />
-      <div className="scroll pad" style={{ paddingTop: 8 }}>
+      <div className="scroll pad scroll--topo8">
         <div className="laudo">
           <div className="lhead">
             <div>
@@ -98,14 +98,14 @@ export default function Laudo({ nav, params }) {
                 {LAUDO.debitos.map(([d, v, s, ruim]) => (
                   <tr key={d}>
                     <td>{d}</td><td>{v}</td>
-                    <td style={{ color: ruim ? '#d01836' : '#3f7a10' }}>{s}</td>
+                    <td className={ruim ? 'ruim' : 'ok'}>{s}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </Sec>
 
-          <div style={{ fontSize: 9, color: '#a2ada7', padding: '12px 2px 4px', lineHeight: '14px' }}>
+          <div className="aviso">
             Documento gerado eletronicamente pela plataforma Tenvê. Protótipo — dados ilustrativos.
           </div>
         </div>

@@ -14,9 +14,7 @@ function Row({ p, onClick, query }) {
       </div>
       <div className="sep" />
       <div className="meta">
-        <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <Icon name="calendar" size={13} />{p.data}
-        </span>
+        <span className="meta-item"><Icon name="calendar" size={13} />{p.data}</span>
         <span className="right">Pesquisa nº {p.numero}</span>
       </div>
     </button>
@@ -31,7 +29,7 @@ export function ListaPesquisas({ nav, store }) {
   return (
     <>
       <AppBar title="Pesquisas" onSearch={() => nav.go('busca-pesquisas')} />
-      <div className="scroll" style={{ paddingBottom: 100 }}>
+      <div className="scroll scroll--lista">
         {grupos.map(({ g, itens }) => (
           <div key={g}>
             <GroupHeader label={g === 'andamento' ? 'Em andamento' : 'Concluídas'} count={itens.length} />
@@ -64,7 +62,7 @@ export function BuscaPesquisas({ nav, store }) {
           <Icon name="search" size={20} color="#04662b" />
           <input value={q} onChange={e => setQ(e.target.value)} placeholder="Placa, Nº, Nome, Data" />
           {q ? (
-            <button className="iconbtn" style={{ width: 28, height: 28 }} onClick={() => setQ('')} aria-label="Limpar">
+            <button className="iconbtn" className="iconbtn iconbtn--sm" onClick={() => setQ('')} aria-label="Limpar">
               <Icon name="x" size={18} />
             </button>
           ) : <Icon name="filter" size={18} color="#6b7a72" />}
@@ -105,17 +103,17 @@ export function NovaPesquisa({ nav, store }) {
   return (
     <>
       <StepBar title="Nova pesquisa" onBack={nav.back} sub="Histórico do veículo pela placa" />
-      <div className="scroll pad" style={{ paddingTop: 12 }}>
+      <div className="scroll pad scroll--topo">
         <Note tone="lime" icon="search">
           Informe a placa e receba o histórico do veículo em PDF após o pagamento. Sem vistoria presencial.
         </Note>
-        <div style={{ fontSize: 13, color: '#6b7a72', marginBottom: 10 }}>Veículo</div>
+        <div className="secao">Veículo</div>
         <Field label="Placa" required icon="car" error={erro.placa} value={f.placa} placeholder="ABC1D23"
           onChange={e => set('placa', e.target.value.toUpperCase().slice(0, 7))} />
         <Field label="Confirme a placa" required icon="car" error={erro.confirma} value={f.confirma} placeholder="ABC1D23"
           onChange={e => set('confirma', e.target.value.toUpperCase().slice(0, 7))} />
 
-        <div style={{ fontSize: 13, color: '#6b7a72', margin: '20px 0 10px' }}>Solicitante</div>
+        <div className="secao secao--espacada">Solicitante</div>
         <Field label="Nome" required icon="user" error={erro.nome} value={f.nome} placeholder="Nome do solicitante"
           onChange={e => set('nome', e.target.value)} />
         <Field label="Telefone" required icon="phone" error={erro.telefone} value={f.telefone} placeholder="(11) 99999-9999"
@@ -133,11 +131,11 @@ export function PesquisaEnviada({ nav, store, params }) {
   return (
     <>
       <StepBar title="Pesquisa enviada" onBack={() => nav.reset('pesquisas')} sub={`Laudo #${p?.numero}`} />
-      <div className="scroll pad" style={{ paddingTop: 16 }}>
-        <div className="note note-lime" style={{ padding: 18, alignItems: 'flex-start' }}>
+      <div className="scroll pad scroll--topo">
+        <div className="note note-lime aviso-sucesso">
           <span className="successicon"><Icon name="check" size={22} strokeWidth={3} color="#fff" /></span>
-          <div style={{ marginLeft: 4 }}>
-            <b style={{ fontSize: 16, marginBottom: 6 }}>Pesquisa liberada</b>
+          <div>
+            <b>Pesquisa liberada</b>
             Sem pagamento nesta etapa — a cobrança é feita na conta da franquia.
             A pesquisa já entrou na fila de análise.
           </div>
@@ -147,7 +145,7 @@ export function PesquisaEnviada({ nav, store, params }) {
           <DataRow k="Modalidade" v="Conta da franquia" />
           <DataRow k="Placa" v={p?.placa} mono />
         </Card>
-        <div style={{ fontSize: 13, color: '#6b7a72', textAlign: 'center', padding: 8 }}>
+        <div className="rodape-nota">
           {p?.status === 'concluida' ? 'Resultado disponível.' : 'O resultado costuma sair em poucos segundos…'}
         </div>
       </div>
@@ -162,11 +160,11 @@ export function DetalhePesquisa({ nav, store, params }) {
   return (
     <>
       <StepBar title="Detalhes da pesquisa" onBack={nav.back}
-        sub={<span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        sub={<span className="linha-icone">
           <span className="mono">{p.placa}</span>
           <Pill status={p.status} />
         </span>} />
-      <div className="scroll pad" style={{ paddingTop: 16 }}>
+      <div className="scroll pad scroll--topo">
         <Card title="Informações">
           <IconRow icon="car" k="Placa" v={p.placa} mono />
           <IconRow icon="clipboard-list" k="Nº da pesquisa" v={`#${p.numero}`} />
@@ -179,16 +177,11 @@ export function DetalhePesquisa({ nav, store, params }) {
         </Card>
         <Card title="Histórico">
           {p.hist.map(([t, d], i) => (
-            <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '6px 0' }}>
-              <span style={{
-                width: 9, height: 9, borderRadius: 5, marginTop: 6, flex: 'none',
-                background: i === p.hist.length - 1 ? '#04662b' : '#7edf20',
-              }} />
+            <div key={i} className={`hist${i === p.hist.length - 1 ? ' atual' : ''}`}>
+              <span className="ponto" />
               <div>
-                <div style={{ fontSize: 14, fontWeight: i === p.hist.length - 1 ? 600 : 400, color: i === p.hist.length - 1 ? '#04662b' : '#0b1410' }}>{t}</div>
-                <div style={{ fontSize: 13, color: '#a2ada7', display: 'flex', gap: 5, alignItems: 'center' }}>
-                  <Icon name="clock" size={13} />{d}
-                </div>
+                <div className="t">{t}</div>
+                <div className="q"><Icon name="clock" size={13} />{d}</div>
               </div>
             </div>
           ))}

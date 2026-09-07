@@ -16,7 +16,7 @@ function Etapa({ nav, store, n, titulo, opcional, children, onContinuar, rotulo 
       <StepBar title={titulo} onBack={() => nav.go('nv-hub', {}, 'pop')}
         sub={`Etapa ${n} de ${TOTAL}${opcional ? ' · opcional' : ''}`} progresso={n / TOTAL} />
       <ContextBar placa={d.veiculo.placa} tipo={`${d.veiculo.tipo} · ${d.veiculo.pintura}`} />
-      <div className="scroll pad" style={{ paddingTop: 16 }}>{children}</div>
+      <div className="scroll pad scroll--topo">{children}</div>
       <ActionBar>
         <Button onClick={onContinuar} disabled={!podeContinuar}>{rotulo}</Button>
       </ActionBar>
@@ -44,8 +44,8 @@ export function Solicitante({ nav, store }) {
     <>
       <StepBar title="Solicitante" onBack={() => nav.back()}
         sub={`Etapa 1 de ${TOTAL}`} progresso={1 / TOTAL} />
-      <div className="scroll pad" style={{ paddingTop: 16 }}>
-        <p style={{ fontSize: 15, lineHeight: '22px', color: '#35433c', margin: '0 0 20px' }}>
+      <div className="scroll pad scroll--topo">
+        <p className="intro">
           Quem está pedindo a vistoria. Usamos esses dados para contato e envio do laudo.
         </p>
         <Field label="Nome completo" required icon="user" error={erro.nome}
@@ -71,7 +71,7 @@ export function Hub({ nav, store }) {
     <>
       <StepBar title="Vistoria" onBack={() => nav.reset('vistorias', {}, 'fade')}
         sub={`${d.veiculo.pintura} · ${feitas} de ${TOTAL} concluídas`} progresso={feitas / TOTAL} />
-      <div className="scroll" style={{ paddingTop: 16 }}>
+      <div className="scroll scroll--topo">
         <div className="hubgrid">
           <button className="hubcard done" onClick={() => nav.go('nv-solicitante')}>
             <span className="num"><Icon name="check" size={15} strokeWidth={3} /></span>
@@ -124,7 +124,7 @@ export function Veiculo({ nav, store }) {
 
   return (
     <Etapa nav={nav} store={store} n={2} titulo="Dados do veículo" onContinuar={continuar}>
-      <div style={{ fontSize: 13, color: '#6b7a72', marginBottom: 10 }}>Identificação</div>
+      <div className="secao">Identificação</div>
       <Field label="Placa" required icon="car" error={erro.placa} ok={placaOk}
         value={d.placa} placeholder="ABC1234"
         onChange={e => set('placa', e.target.value.toUpperCase().slice(0, 7))} />
@@ -134,23 +134,21 @@ export function Veiculo({ nav, store }) {
       <Field label="Renavam" icon="file-text"
         value={d.renavam} placeholder="00451229266" onChange={e => set('renavam', e.target.value)} />
 
-      <div style={{ fontSize: 13, color: '#6b7a72', margin: '20px 0 10px' }}>Características</div>
+      <div className="secao secao--espacada">Características</div>
       <Field label="Marca e modelo" required icon="car" error={erro.marca}
         value={d.marca} placeholder="VOLKSWAGEN SAVEIRO" onChange={e => set('marca', e.target.value)} />
       <Field label="Quilometragem" icon="clipboard"
         value={d.km} placeholder="Não visível" onChange={e => set('km', e.target.value)} />
 
-      <div style={{ fontSize: 13, color: '#6b7a72', margin: '20px 0 10px' }}>Tipo de vistoria</div>
-      <div className="chips" style={{ marginBottom: 12 }}>
+      <div className="secao secao--espacada">Tipo de vistoria</div>
+      <div className="chips chips--mb12">
         {['Entrada', 'Saída'].map(t => (
-          <button key={t} className="chip" onClick={() => set('tipo', t)}
-            style={d.tipo === t ? { background: '#04662b', color: '#fff' } : undefined}>{t}</button>
+          <button key={t} className={`chip${d.tipo === t ? ' on' : ''}`} onClick={() => set('tipo', t)}>{t}</button>
         ))}
       </div>
-      <div className="chips" style={{ marginBottom: 20 }}>
+      <div className="chips chips--mb20">
         {['Com pintura', 'Sem pintura'].map(t => (
-          <button key={t} className="chip" onClick={() => set('pintura', t)}
-            style={d.pintura === t ? { background: '#04662b', color: '#fff' } : undefined}>{t}</button>
+          <button key={t} className={`chip${d.pintura === t ? ' on' : ''}`} onClick={() => set('pintura', t)}>{t}</button>
         ))}
       </div>
     </Etapa>
@@ -178,7 +176,7 @@ export function Fotos({ nav, store }) {
         {FOTOS.map((label, i) => (
           <div key={label}>
             <button className={`slot${d.fotos[i] ? ' filled' : ''}`} onClick={() => toggle(i)}
-              style={{ width: '100%' }} aria-label={`Foto ${label}`}>
+              aria-label={`Foto ${label}`}>
               <span className="idx mono">{String(i + 1).padStart(2, '0')}</span>
               {!d.fotos[i] && <Icon name="camera" size={26} />}
               {d.fotos[i] && <span className="ck"><Icon name="check" size={14} strokeWidth={3} color="#fff" /></span>}
@@ -187,7 +185,7 @@ export function Fotos({ nav, store }) {
           </div>
         ))}
       </div>
-      <div style={{ height: 12 }} />
+      <div className="espaco12" />
       <Note tone="info" icon="camera">Toque no quadro para simular a captura da foto.</Note>
     </Etapa>
   )
@@ -225,7 +223,7 @@ export function Pintura({ nav, store }) {
                 <div key={m.faixa}>
                   <button className={`sw${sel === f ? ' sel' : ''}`} onClick={() => escolher(p, f)}
                     aria-label={`${ponto}: ${m.faixa} mícrons`}
-                    style={{ width: '100%', background: m.cor, opacity: sel === null || sel === f ? 1 : .38 }} />
+                    style={{ background: m.cor, opacity: sel === null || sel === f ? 1 : .38 }} />
                   <div className="swlabel">{m.faixa}</div>
                 </div>
               ))}
@@ -259,32 +257,32 @@ export function Extras({ nav, store }) {
 
       {form && (
         <Card title="Nova foto extra">
-          <div className="slot filled" style={{ height: 110, marginBottom: 14 }}>
+          <div className="slot filled slot--novo">
             <span className="idx mono">NOVA</span>
           </div>
-          <div style={{ fontSize: 13, color: '#6b7a72', marginBottom: 8 }}>Categoria</div>
-          <div className="chips" style={{ marginBottom: 16 }}>
+          <div className="secao secao--mb8">Categoria</div>
+          <div className="chips chips--mb16">
             {CATEGORIAS_EXTRA.map(c => (
-              <button key={c} className="chip" onClick={() => setForm(f => ({ ...f, categoria: c }))}
-                style={form.categoria === c ? { background: '#04662b', color: '#fff' } : undefined}>{c}</button>
+              <button key={c} className={`chip${form.categoria === c ? ' on' : ''}`}
+                onClick={() => setForm(f => ({ ...f, categoria: c }))}>{c}</button>
             ))}
           </div>
           <Field label="Local" required value={form.local} placeholder="Porta traseira direita"
             onChange={e => setForm(f => ({ ...f, local: e.target.value }))} />
           <Field label="Descrição" value={form.descricao} placeholder="Risco na pintura"
             onChange={e => setForm(f => ({ ...f, descricao: e.target.value }))} />
-          <div style={{ display: 'flex', gap: 10 }}>
+          <div className="acoes-lado">
             <Button variant="ghost" icon={null} onClick={() => setForm(null)}>Cancelar</Button>
             <Button icon={null} onClick={adicionar} disabled={!form.local.trim()}>Adicionar</Button>
           </div>
         </Card>
       )}
 
-      <div style={{ fontSize: 13, color: '#6b7a72', margin: '4px 0' }}>
+      <div className="secao">
         Adicionadas {d.extras.length ? `(${d.extras.length})` : ''}
       </div>
       {!d.extras.length && (
-        <div className="empty" style={{ padding: '40px 20px' }}>
+        <div className="empty empty--curto">
           <Icon name="camera" size={30} /><br />Nenhuma foto extra ainda.
         </div>
       )}
@@ -320,13 +318,13 @@ export function Checklist({ nav, store }) {
       <Note tone="warn" icon="alert-triangle" title="Confira antes de marcar">
         Verifique fisicamente cada item — estas respostas entram no laudo.
       </Note>
-      <div style={{ fontSize: 13, color: '#6b7a72', marginBottom: 8 }}>Resumo</div>
+      <div className="secao secao--mb8">Resumo</div>
       <Card>
         <DataRow k="Placa" v={d.veiculo.placa || '—'} mono />
         <DataRow k="Quilometragem" v={d.veiculo.km || 'Não visível'} />
         <DataRow k="Tipo de vistoria" v={d.veiculo.tipo} />
       </Card>
-      <div style={{ fontSize: 13, color: '#6b7a72', margin: '16px 0 0' }}>Itens de verificação</div>
+      <div className="secao secao--mt16">Itens de verificação</div>
       {CHECKLIST.map(item => (
         <div className="checkrow" key={item}>
           <div className="q"><Icon name="info" size={17} color="#6b7a72" />{item}</div>
@@ -361,13 +359,13 @@ export function Observacoes({ nav, store }) {
       <textarea className="ta" value={d.obs} maxLength={500}
         onChange={e => store.setRascunho(r => ({ ...r, obs: e.target.value }))}
         placeholder="Descreva o que for relevante sobre o estado do veículo." />
-      <div className="mono" style={{ textAlign: 'right', fontSize: 13, color: '#a2ada7', marginBottom: 16 }}>
+      <div className="mono contador">
         {d.obs.length} / 500
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#6b7a72', marginBottom: 10 }}>
+      <div className="secao secao--linha">
         <span>Sugestões do sistema</span><span>{SUGESTOES.length}</span>
       </div>
-      <div className="chips" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+      <div className="chips chips--coluna">
         {SUGESTOES.map(s => (
           <button key={s} className="chip" onClick={() => add(s)}>
             <Icon name="plus" size={16} strokeWidth={2.5} />{s}
@@ -384,11 +382,11 @@ export function Enviada({ nav, store, params }) {
     <>
       <StepBar title="Vistoria enviada" onBack={() => nav.reset('vistorias', {}, 'fade')}
         sub={`Laudo #${params?.numero || store.ultimoLaudo}`} />
-      <div className="scroll pad" style={{ paddingTop: 16 }}>
-        <div className="note note-lime" style={{ padding: 18, alignItems: 'flex-start' }}>
+      <div className="scroll pad scroll--topo">
+        <div className="note note-lime aviso-sucesso">
           <span className="successicon"><Icon name="check" size={22} strokeWidth={3} color="#fff" /></span>
-          <div style={{ marginLeft: 4 }}>
-            <b style={{ fontSize: 16, marginBottom: 6 }}>Vistoria liberada</b>
+          <div>
+            <b>Vistoria liberada</b>
             Sem pagamento nesta etapa — a cobrança é feita na conta da franquia.
             O laudo já entrou na fila de análise.
           </div>

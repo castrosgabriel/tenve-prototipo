@@ -20,8 +20,8 @@ export default function Perfil({ store }) {
         <div className="card profcard">
           <div className="avatar">{iniciais}</div>
           <div>
-            <div style={{ fontSize: 17, fontWeight: 600 }}>{u?.nome}</div>
-            <div style={{ fontSize: 14, color: '#6b7a72' }}>Vistoriador · {u?.franquia}</div>
+            <div className="perfil-nome">{u?.nome}</div>
+            <div className="perfil-papel">Vistoriador · {u?.franquia}</div>
           </div>
         </div>
 
@@ -35,12 +35,12 @@ export default function Perfil({ store }) {
           ))}
         </Card>
 
-        <div style={{ height: 4 }} />
+        <div className="espaco4" />
         <button className="logout" onClick={store.sair}>
           <Icon name="log-out" size={19} />Sair da conta
         </button>
 
-        <div style={{ textAlign: 'center', fontSize: 12, color: '#a2ada7', padding: 20 }}>
+        <div className="perfil-rodape">
           Tenvê · protótipo navegável · build {__BUILD__}
         </div>
       </div>
