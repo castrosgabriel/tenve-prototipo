@@ -1,8 +1,8 @@
 # Tenvê · protótipo navegável
 
-Aplicação React que reproduz o fluxo do app Tenvê a partir do Figma
-([App · Telas](https://www.figma.com/design/0d8nOPNoqFkTeUO61dQTbQ/Tenv%C3%AA?node-id=279-3780)).
-Estado em memória — nada é persistido, é só para clicar e testar.
+Aplicação React que reproduz o fluxo do app Tenvê a partir do arquivo de design
+(página "App · Telas"). Estado em memória — nada é persistido, é só para clicar
+e testar.
 
 ## Rodando
 
